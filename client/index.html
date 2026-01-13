@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>VibeCode 101 // Register</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@300;500;700&family=Orbitron:wght@500;700;900&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        --neon: #00ffcc;
+        --neon-blue: #00c8ff;
+        --dark: #050505;
+        --glass: rgba(10, 15, 20, 0.75);
+        --border: rgba(0, 255, 204, 0.3);
+        --text-main: #fff;
+        --text-muted: rgba(255, 255, 255, 0.6);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        background-color: var(--dark);
+        color: var(--text-main);
+        font-family: "Chakra Petch", sans-serif;
+        overflow-x: hidden;
+      }
+
+      /* 3D Canvas Background */
+      #canvas-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: -1;
+        background: radial-gradient(circle at center, #0a0a10 0%, #000 90%);
+      }
+
+      /* Main Wrapper */
+      .wrapper {
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 40px 20px;
+      }
+
+      /* Responsive Grid */
+      .container {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 50px;
+        width: 100%;
+        max-width: 600px; /* Mobile Default */
+        position: relative;
+        z-index: 1;
+      }
+
+      /* --- LEFT SIDE: INFO --- */
+      .hero-section {
+        text-align: center;
+        animation: slideInLeft 0.8s ease-out;
+      }
+
+      .logo-group {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 25px;
+        margin-bottom: 30px;
+      }
+
+      .logo-wrapper {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(0, 255, 204, 0.1);
+        border-radius: 12px;
+        padding: 10px;
+        backdrop-filter: blur(5px);
+        transition: transform 0.3s;
+      }
+
+      .logo-wrapper:hover {
+        transform: scale(1.05);
+        border-color: var(--neon);
+      }
+
+      .logo-group img {
+        height: 50px;
+        display: block;
+      }
+
+      h1 {
+        font-family: "Orbitron", sans-serif;
+        font-size: 2.8rem;
+        text-transform: uppercase;
+        line-height: 1;
+        margin-bottom: 10px;
+        background: linear-gradient(90deg, #fff, var(--neon));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-shadow: 0 0 20px rgba(0, 255, 204, 0.3);
+      }
+
+      .subtitle {
+        font-size: 1.1rem;
+        color: var(--neon-blue);
+        margin-bottom: 25px;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        font-weight: 700;
+      }
+
+      .speaker-card {
+        background: rgba(0, 255, 204, 0.05);
+        border: 1px solid var(--border);
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 25px;
+        display: inline-block;
+      }
+
+      /* Benefits List (From Design 2) */
+      .benefits-box {
+        text-align: left;
+        background: rgba(0, 0, 0, 0.4);
+        border-left: 3px solid var(--neon-blue);
+        padding: 20px;
+        border-radius: 0 8px 8px 0;
+        margin-bottom: 25px;
+      }
+
+      .benefits-box h3 {
+        color: var(--neon);
+        font-family: "Orbitron";
+        margin-bottom: 10px;
+        font-size: 1rem;
+      }
+
+      .benefits-list {
+        list-style: none;
+      }
+
+      .benefits-list li {
+        position: relative;
+        padding-left: 20px;
+        margin-bottom: 8px;
+        font-size: 0.95rem;
+        color: #ddd;
+      }
+
+      .benefits-list li::before {
+        content: ">";
+        position: absolute;
+        left: 0;
+        color: var(--neon);
+        font-weight: bold;
+      }
+
+      /* Event Details Grid */
+      .details-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+        margin-top: 20px;
+      }
+
+      .detail-item {
+        background: rgba(255, 255, 255, 0.03);
+        padding: 15px;
+        border-radius: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        text-align: left;
+      }
+
+      .detail-label {
+        font-size: 0.75rem;
+        color: var(--neon);
+        text-transform: uppercase;
+        display: block;
+        margin-bottom: 5px;
+        font-weight: 700;
+      }
+
+      .detail-val {
+        font-size: 1rem;
+        font-weight: 500;
+      }
+
+      /* --- RIGHT SIDE: FORM --- */
+      .form-box {
+        background: var(--glass);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 30px;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+        animation: slideInUp 0.8s ease-out;
+        height: fit-content;
+      }
+
+      .form-header {
+        margin-bottom: 20px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        padding-bottom: 15px;
+      }
+
+      .form-header h2 {
+        font-family: "Orbitron";
+        color: #fff;
+      }
+
+      .form-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 15px;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 6px;
+        font-size: 0.8rem;
+        color: var(--neon-blue);
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      input,
+      select {
+        width: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        border: 1px solid #333;
+        color: #fff;
+        padding: 12px 15px;
+        border-radius: 6px;
+        font-size: 1rem;
+        font-family: "Chakra Petch", sans-serif;
+        transition: 0.3s;
+        outline: none;
+      }
+
+      input:focus,
+      select:focus {
+        border-color: var(--neon);
+        background: rgba(0, 255, 204, 0.05);
+        box-shadow: 0 0 15px rgba(0, 255, 204, 0.1);
+      }
+
+      select option {
+        background: #000;
+      }
+
+      .btn-submit {
+        width: 100%;
+        background: linear-gradient(135deg, var(--neon-blue), var(--neon));
+        color: #000;
+        border: none;
+        padding: 16px;
+        font-size: 1.1rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        border-radius: 6px;
+        cursor: pointer;
+        margin-top: 15px;
+        box-shadow: 0 0 20px rgba(0, 255, 204, 0.2);
+        transition: 0.3s;
+        font-family: "Orbitron", sans-serif;
+      }
+
+      .btn-submit:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 0 30px rgba(0, 255, 204, 0.5);
+      }
+
+      .btn-submit:disabled {
+        cursor: not-allowed;
+        opacity: 0.7;
+      }
+
+      /* --- DESKTOP STYLES (Min-Width 1024px) --- */
+      @media (min-width: 1024px) {
+        .container {
+          max-width: 1200px;
+          grid-template-columns: 1fr 1fr; /* Split screen */
+          align-items: start;
+          gap: 60px;
+        }
+
+        .hero-section {
+          text-align: left;
+          position: sticky;
+          top: 40px;
+        }
+
+        .logo-group {
+          justify-content: flex-start;
+        }
+
+        h1 {
+          font-size: 4rem;
+        }
+        .subtitle {
+          font-size: 1.4rem;
+        }
+
+        .form-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+        .span-full {
+          grid-column: span 2;
+        }
+      }
+
+      @keyframes slideInLeft {
+        from {
+          opacity: 0;
+          transform: translateX(-50px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+      @keyframes slideInUp {
+        from {
+          opacity: 0;
+          transform: translateY(50px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="canvas-container"></div>
+
+    <div class="wrapper">
+      <div class="container">
+        <div class="hero-section">
+          <div class="logo-group">
+            <div class="logo-wrapper">
+              <img
+                src="https://anantagsfcu.vercel.app/assets/gsfcu-new-logo-2ed72668.png"
+                alt="GSFCU"
+              />
+            </div>
+            <div class="logo-wrapper">
+              <img
+                src="https://anantagsfcu.vercel.app/assets/code.png"
+                alt="Code Club"
+              />
+            </div>
+          </div>
+
+          <h1>Vibe Code 101</h1>
+          <p class="subtitle">The Art of MVP Building</p>
+
+          <div class="speaker-card">
+            <span style="color: var(--neon)">FEATURING ALUMNI SPEAKER</span
+            ><br />
+            <strong style="font-size: 1.2rem">Taneeskh Patel</strong>
+          </div>
+
+          <div class="benefits-box">
+            <h3>// SYSTEM_MODULES_LOADING...</h3>
+            <ul class="benefits-list">
+              <li>Convert ideas into working prototypes</li>
+              <li>Build MVPs faster and smarter</li>
+              <li>Real-world coding mindset vs. Academic coding</li>
+              <li>Deployment strategies for students</li>
+            </ul>
+          </div>
+
+          <div class="details-grid">
+            <div class="detail-item">
+              <span class="detail-label">DATE</span>
+              <div class="detail-val">19 JAN 2026</div>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">TIME</span>
+              <div class="detail-val">10:00 AM - 01:00 PM</div>
+            </div>
+            <div class="detail-item" style="grid-column: span 2">
+              <span class="detail-label">LOCATION</span>
+              <div class="detail-val">SOT Auditorium, GSFC University</div>
+            </div>
+          </div>
+
+          <p
+            style="
+              margin-top: 30px;
+              font-size: 0.8rem;
+              color: #555;
+              font-family: 'Orbitron';
+            "
+          >
+            STATUS: <span style="color: #0f0">ONLINE</span> //
+            SPOTS_FILLING_FAST
+          </p>
+        </div>
+
+        <form class="form-box" id="registration-form">
+          <div class="form-header">
+            <h2>INITIALIZE REGISTRATION</h2>
+            <p style="font-size: 0.8rem; color: #aaa">
+              Secure your spot on the grid.
+            </p>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-group span-full">
+              <label>Full Name</label>
+              <input
+                type="text"
+                id="name"
+                required
+                placeholder="Enter your full name"
+              />
+            </div>
+
+            <div class="form-group">
+              <label>Enrollment ID</label>
+              <input
+                type="text"
+                id="enrollment"
+                required
+                placeholder="2023..."
+              />
+            </div>
+
+            <div class="form-group">
+              <label>Phone</label>
+              <input type="tel" id="phone" required placeholder="98765..." />
+            </div>
+
+            <div class="form-group span-full">
+              <label>Email Address</label>
+              <input
+                type="email"
+                id="email"
+                required
+                placeholder="student@gsfcuniversity.ac.in"
+              />
+            </div>
+
+            <div class="form-group">
+              <label>School</label>
+              <select id="school" required>
+                <option value="" disabled selected>Select School</option>
+                <option value="SOT">SOT (Technology)</option>
+                <option value="SOS">SOS (Science)</option>
+                <option value="SOM">SOM (Management)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Year</label>
+              <select id="year" required>
+                <option value="" disabled selected>Select Year</option>
+                <option value="1st">1st Year</option>
+                <option value="2nd">2nd Year</option>
+                <option value="3rd">3rd Year</option>
+                <option value="4th">4th Year</option>
+              </select>
+            </div>
+
+            <div class="form-group span-full">
+              <label>Course / Branch</label>
+              <input
+                type="text"
+                id="course"
+                required
+                placeholder="e.g. CSE, Chemical, BBA"
+              />
+            </div>
+          </div>
+
+          <button type="submit" class="btn-submit">Confirm Access</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div
+      id="toast"
+      style="
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        background: rgba(0, 0, 0, 0.85);
+        border: 1px solid #00ffcc;
+        color: #00ffcc;
+        padding: 16px 22px;
+        border-radius: 10px;
+        font-family: Orbitron;
+        display: none;
+        z-index: 9999;
+        box-shadow: 0 0 25px rgba(0, 255, 204, 0.4);
+      "
+    ></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+      const container = document.getElementById("canvas-container");
+
+      // --- SCENE SETUP ---
+      const scene = new THREE.Scene();
+      scene.fog = new THREE.FogExp2(0x050505, 0.002);
+
+      const camera = new THREE.PerspectiveCamera(
+        75,
+        window.innerWidth / window.innerHeight,
+        0.1,
+        1000
+      );
+      camera.position.z = 30;
+
+      const renderer = new THREE.WebGLRenderer({
+        alpha: true,
+        antialias: true,
+      });
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      container.appendChild(renderer.domElement);
+
+      // --- OBJECT 1: PARTICLE FIELD (The "Vibe") ---
+      const isDesktop = window.innerWidth > 1024;
+      const particlesCount = isDesktop ? 1500 : 600;
+      const geometry = new THREE.BufferGeometry();
+      const posArray = new Float32Array(particlesCount * 3);
+
+      for (let i = 0; i < particlesCount * 3; i++) {
+        posArray[i] = (Math.random() - 0.5) * 80;
+      }
+
+      geometry.setAttribute("position", new THREE.BufferAttribute(posArray, 3));
+      const material = new THREE.PointsMaterial({
+        size: 0.15,
+        color: 0x00ffcc,
+        transparent: true,
+        opacity: 0.8,
+      });
+      const particlesMesh = new THREE.Points(geometry, material);
+      scene.add(particlesMesh);
+
+      // --- OBJECT 2: GEOMETRIC CUBE (The "Structure") ---
+      let wireframeCube;
+      if (isDesktop) {
+        const cubeGeo = new THREE.IcosahedronGeometry(15, 0);
+        const cubeEdges = new THREE.EdgesGeometry(cubeGeo);
+        const lineMat = new THREE.LineBasicMaterial({
+          color: 0x00c8ff,
+          transparent: true,
+          opacity: 0.15,
+        });
+        wireframeCube = new THREE.LineSegments(cubeEdges, lineMat);
+        scene.add(wireframeCube);
+      }
+
+      // --- INTERACTION ---
+      let mouseX = 0;
+      let mouseY = 0;
+
+      document.addEventListener("mousemove", (event) => {
+        mouseX = event.clientX - window.innerWidth / 2;
+        mouseY = event.clientY - window.innerHeight / 2;
+      });
+
+      // --- ANIMATION LOOP ---
+      const clock = new THREE.Clock();
+
+      function animate() {
+        const elapsedTime = clock.getElapsedTime();
+
+        particlesMesh.rotation.y = elapsedTime * 0.05;
+        particlesMesh.rotation.x = elapsedTime * 0.02;
+
+        particlesMesh.rotation.y += mouseX * 0.00005;
+        particlesMesh.rotation.x += mouseY * 0.00005;
+
+        if (wireframeCube) {
+          wireframeCube.rotation.x = -elapsedTime * 0.1;
+          wireframeCube.rotation.y = elapsedTime * 0.1;
+        }
+
+        renderer.render(scene, camera);
+        requestAnimationFrame(animate);
+      }
+
+      animate();
+
+      // --- RESIZE ---
+      window.addEventListener("resize", () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      });
+
+      // --- FORM LOGIC ---
+      document
+        .getElementById("registration-form")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault();
+
+          // Gather Data
+          const formData = {
+            name: document.getElementById("name").value,
+            enrollment: document.getElementById("enrollment").value,
+            phone: document.getElementById("phone").value,
+            email: document.getElementById("email").value,
+            school: document.getElementById("school").value,
+            year: document.getElementById("year").value,
+            course: document.getElementById("course").value,
+          };
+
+          console.log("// DATA_PACKET_SENT:", formData);
+
+          // Visual Feedback
+          const btn = document.querySelector(".btn-submit");
+          const originalText = btn.innerText;
+          btn.innerText = "PROCESSING...";
+          btn.style.background = "#fff";
+          btn.disabled = true;
+
+          try {
+            // API Call
+            const response = await fetch("https://api.nirinfotech.in/api/register", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(formData),
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+              // Success
+              showToast("✓ " + result.message.toUpperCase(), "success");
+              btn.innerText = "✓ REGISTERED";
+              btn.style.background = "linear-gradient(135deg, #00ff88, #00ffcc)";
+              
+              // Reset form after 2 seconds
+              setTimeout(() => {
+                document.getElementById("registration-form").reset();
+                btn.innerText = originalText;
+                btn.style.background = "linear-gradient(135deg, var(--neon-blue), var(--neon))";
+                btn.disabled = false;
+              }, 2000);
+            } else {
+              // Error from server
+              throw new Error(result.message || "Registration failed");
+            }
+          } catch (error) {
+            console.error("// ERROR:", error);
+            showToast("✗ " + error.message.toUpperCase(), "error");
+            btn.innerText = originalText;
+            btn.style.background = "linear-gradient(135deg, var(--neon-blue), var(--neon))";
+            btn.disabled = false;
+          }
+        });
+
+      // Toast Notification Function
+      function showToast(message, type) {
+        const toast = document.getElementById("toast");
+        toast.innerText = message;
+        toast.style.display = "block";
+        
+        if (type === "error") {
+          toast.style.borderColor = "#ff0044";
+          toast.style.color = "#ff0044";
+          toast.style.boxShadow = "0 0 25px rgba(255, 0, 68, 0.4)";
+        } else {
+          toast.style.borderColor = "#00ffcc";
+          toast.style.color = "#00ffcc";
+          toast.style.boxShadow = "0 0 25px rgba(0, 255, 204, 0.4)";
+        }
+
+        setTimeout(() => {
+          toast.style.display = "none";
+        }, 4000);
+      }
+    </script>
+  </body>
+</html>
