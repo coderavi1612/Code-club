@@ -447,7 +447,14 @@
 
             <div class="form-group">
               <label>Phone</label>
-              <input type="tel" id="phone" required placeholder="98765..." />
+              <input 
+              type="tel" 
+              id="phone" 
+              required 
+              placeholder="98765..."
+              pattern="[0-9]{10}"
+              inputmode="numeric"
+              />
             </div>
 
             <div class="form-group span-full">
@@ -639,12 +646,12 @@
           btn.style.background = "#fff";
           btn.disabled = true;
 
-          try {
+            try {
             // API Call
             const response = await fetch("https://api.nirinfotech.in/api/register", {
               method: "POST",
               headers: {
-                "Content-Type": "application/json",
+              "Content-Type": "application/json",
               },
               body: JSON.stringify(formData),
             });
@@ -654,28 +661,35 @@
             if (result.success) {
               // Success
               showToast("✓ " + result.message.toUpperCase(), "success");
-              btn.innerText = "✓ REGISTERED";
+              btn.innerText = "REGISTERED";
               btn.style.background = "linear-gradient(135deg, #00ff88, #00ffcc)";
               
               // Reset form after 2 seconds
               setTimeout(() => {
-                document.getElementById("registration-form").reset();
-                btn.innerText = originalText;
-                btn.style.background = "linear-gradient(135deg, var(--neon-blue), var(--neon))";
-                btn.disabled = false;
+              document.getElementById("registration-form").reset();
+              btn.innerText = originalText;
+              btn.style.background = "linear-gradient(135deg, var(--neon-blue), var(--neon))";
+              btn.disabled = false;
               }, 2000);
             } else {
               // Error from server
               throw new Error(result.message || "Registration failed");
             }
-          } catch (error) {
+            } catch (error) {
             console.error("// ERROR:", error);
-            showToast("✗ " + error.message.toUpperCase(), "error");
+            
+            // Check if server is unreachable
+            if (error instanceof TypeError && error.message.includes("Failed to fetch")) {
+              showToast("SOMTHING WENT WRONG, TRY AGAIN AFTER SOME TIME", "error");
+            } else {
+              showToast(" " + error.message.toUpperCase(), "error");
+            }
+            
             btn.innerText = originalText;
             btn.style.background = "linear-gradient(135deg, var(--neon-blue), var(--neon))";
             btn.disabled = false;
-          }
-        });
+            }
+          });
 
       // Toast Notification Function
       function showToast(message, type) {

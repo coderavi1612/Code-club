@@ -1,9 +1,9 @@
+require("dotenv").config();
 const express = require("express");
 const mysql = require("mysql2");
 const cors = require("cors");
 const nodemailer = require("nodemailer");
 const app = express();
-require("dotenv").config();
 app.use(express.json());
 
 const port = process.env.PORT || 3000;
@@ -45,7 +45,7 @@ app.post("/api/register", async (req, res) => {
     await connection.beginTransaction();
 
     const [result] = await connection.query(
-      `INSERT INTO participants 
+      `INSERT INTO participants
    (name, enrollment, phone, email, school, course, year)
    VALUES (?, ?, ?, ?, ?, ?, ?)
    ON DUPLICATE KEY UPDATE id = id`,
@@ -93,6 +93,12 @@ app.post("/api/register", async (req, res) => {
         message: "Already registered",
       });
     }
+    if (e.code === "ER_CHECK_CONSTRAINT_VIOLATED") {
+      return res.status(409).json({
+        success: false,
+        message: "Enter Valid number!",
+      });
+    }
 
     console.error(e);
     res.status(500).json({
@@ -123,6 +129,7 @@ const transporter = nodemailer.createTransport({
 async function sendMail(name, enrollment, phone, email, school, course, year) {
   try {
     await transporter.sendMail({
+      from: '"VibeCode 101 | CODE Club" <code.gsfcu@gmail.com>',
       to: email,
       subject: `${name} has participated in CODE club's event`,
       html: `<!DOCTYPE html>
@@ -146,7 +153,7 @@ async function sendMail(name, enrollment, phone, email, school, course, year) {
           <!-- HEADER -->
           <tr>
             <td align="center" style="padding:28px 20px; background:#020409;">
-              <img src="https://anantagsfcu.vercel.app/assets/code.png"
+              <img src="https://vibecode-101.vercel.app/code-logo.png"
                 width="64"
                 alt="Code Club"
                 style="display:block; margin-bottom:14px;" />
@@ -213,7 +220,7 @@ async function sendMail(name, enrollment, phone, email, school, course, year) {
                   <td style="font-size:14px;">📅 <strong>19 Jan 2026</strong></td>
                 </tr>
                 <tr>
-                  <td style="font-size:14px;">⏰ <strong>10:00 AM – 01:00 PM</strong></td>
+                  <td style="font-size:14px;">⏰ <strong>11:00 AM – 02:00 PM</strong></td>
                 </tr>
                 <tr>
                   <td style="font-size:14px;">📍 <strong>SOT Auditorium, GSFC University</strong></td>
@@ -221,7 +228,7 @@ async function sendMail(name, enrollment, phone, email, school, course, year) {
               </table>
 
               <!-- STATUS -->
-              
+
 
             </td>
           </tr>
